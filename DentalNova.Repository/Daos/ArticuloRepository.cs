@@ -27,5 +27,47 @@ namespace DentalNova.Repository.Daos
                                  .Where(a => a.Activo)
                                  .ToListAsync();
         }
+
+        public IQueryable<Articulo> ObtenerQueryableParaFiltro()
+        {
+            return _context.Articulos.AsNoTracking();
+        }
+
+        public async Task<Articulo> ObtenerPorIdAsync(int id)
+        {
+            return await _context.Articulos.FindAsync(id);
+        }
+
+        public async Task AgregarAsync(Articulo articulo)
+        {
+            await _context.Articulos.AddAsync(articulo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ActualizarAsync(Articulo articulo)
+        {
+            _context.Articulos.Update(articulo);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task EliminarAsync(int id)
+        {
+            var articulo = await _context.Articulos.FindAsync(id);
+            if (articulo != null)
+            {
+                _context.Articulos.Remove(articulo);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<bool> ExisteCodigoAsync(string codigo, int? idExcluir = null)
+        {
+            var query = _context.Articulos.AsNoTracking();
+            if (idExcluir.HasValue)
+            {
+                query = query.Where(a => a.Id != idExcluir.Value);
+            }
+            return await query.AnyAsync(a => a.Codigo == codigo);
+        }
     }
 }

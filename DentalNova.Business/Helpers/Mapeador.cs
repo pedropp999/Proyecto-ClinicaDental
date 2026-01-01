@@ -269,5 +269,33 @@ namespace DentalNova.Business.Helpers
 
             return entidad;
         }
+
+        // ---- Articulo Mappings ----
+
+        public static ArticuloDto ToDto(this Articulo entidad)
+        {
+            return new ArticuloDto
+            {
+                Id = entidad.Id,
+                Categoria = entidad.Categoria,
+                Nombre = entidad.Nombre,
+                Descripcion = entidad.Descripcion,
+                Codigo = entidad.Codigo,
+                Reutilizable = entidad.Reutilizable,
+                Stock = entidad.Stock,
+                Activo = entidad.Activo
+            };
+        }
+
+        public static void MapFromDto(this Articulo entidad, ArticuloDtoIn dto)
+        {
+            entidad.Categoria = dto.Categoria;
+            entidad.Nombre = dto.Nombre;
+            entidad.Descripcion = dto.Descripcion;
+            entidad.Codigo = dto.Codigo;
+            entidad.Reutilizable = dto.Reutilizable;
+            entidad.Stock = dto.Stock;
+            entidad.Activo = dto.Activo;
+        }
     }
 }

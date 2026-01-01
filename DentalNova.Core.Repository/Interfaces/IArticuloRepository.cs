@@ -9,6 +9,17 @@ namespace DentalNova.Core.Repository.Interfaces
 {
     public interface IArticuloRepository
     {
+        // Existente
         Task<IEnumerable<Articulo>> ObtenerTodosActivosAsync();
+
+        // --- CRUD Admin ---
+        IQueryable<Articulo> ObtenerQueryableParaFiltro();
+        Task<Articulo> ObtenerPorIdAsync(int id);
+        Task AgregarAsync(Articulo articulo);
+        Task ActualizarAsync(Articulo articulo);
+        Task EliminarAsync(int id);
+
+        // Validación
+        Task<bool> ExisteCodigoAsync(string codigo, int? idExcluir = null);
     }
 }
