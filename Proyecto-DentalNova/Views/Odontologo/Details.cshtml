@@ -1,0 +1,351 @@
+﻿@model Proyecto_DentalNova.Models.OdontologoViewModel.OdontologoVM
+
+@{
+    ViewData["Title"] = $"Perfil Dr(a). {Model.OdontologoVisual.Nombre}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var iniciales = (!string.IsNullOrEmpty(Model.OdontologoVisual.Nombre) ? Model.OdontologoVisual.Nombre.Substring(0, 1) : "") +
+                    (!string.IsNullOrEmpty(Model.OdontologoVisual.Apellidos) ? Model.OdontologoVisual.Apellidos.Substring(0, 1) : "");
+}
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">@TempData["MensajeExito"] <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">@TempData["MensajeError"] <button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-0">Perfil Profesional</h2>
+        <p class="text-muted mb-0">Detalle de credenciales y gestión de disponibilidad.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-12 col-lg-4">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center pt-5 pb-4">
+                <div class="mb-4 position-relative d-inline-block">
+                    <div class="rounded-circle bg-primary bg-opacity-10 d-flex align-items-center justify-content-center mx-auto text-primary fw-bold fs-1"
+                         style="width: 120px; height: 120px;">
+                        @iniciales
+                    </div>
+                    @* @if (Model.OdontologoVisual.Activo) *@
+                    @if (true)
+                    {
+                        <span class="position-absolute bottom-0 end-0 p-2 bg-success border border-white rounded-circle" title="Activo"></span>
+                    }
+                    else
+                    {
+                        <span class="position-absolute bottom-0 end-0 p-2 bg-danger border border-white rounded-circle" title="Inactivo"></span>
+                    }
+                </div>
+
+                <h4 class="fw-bold text-dark mb-1">@Model.OdontologoVisual.NombreCompleto</h4>
+                <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                    @* @Model.OdontologoVisual.Especialidad *@ AAAAAA
+                </span>
+                <p class="text-muted mt-3 mb-4 small">
+                    <i class="far fa-envelope me-2"></i>@Model.OdontologoVisual.CorreoElectronico <br>
+                    <i class="fas fa-phone me-2"></i>@Model.OdontologoVisual.Telefono
+                </p>
+
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.OdontologoVisual.Id" class="btn btn-outline-primary">
+                        <i class="fas fa-pen me-2"></i> Editar Datos
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-footer bg-light border-0 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small">Cédula Prof.</span>
+                    <span class="fw-bold text-dark">@Model.OdontologoVisual.CedulaProfesional</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-muted small">Graduación</span>
+                    <span class="fw-bold text-dark">@(Model.OdontologoVisual.AnioGraduacion.HasValue? Model.OdontologoVisual.AnioGraduacion.Value.ToString() : "--")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-8">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 text-primary"><i class="bi bi-clock me-2"></i>Horarios de Atención</h5>
+                <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modalHorario">
+                    <i class="fas fa-plus me-1"></i> Nuevo Horario
+                </button>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.Horarios == null || Model.Horarios.Count == 0)
+                {
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-calendar-x fs-1 mb-3"></i>
+                        <p>No hay horarios configurados para este especialista.</p>
+                        <p class="small">Haz clic en "Nuevo Horario" para agregar disponibilidad.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Día</th>
+                                    <th>Horario</th>
+                                    <th>Consultorio</th>
+                                    <th class="text-end pe-4">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Horarios.OrderBy(x => x.DiaSemana).ThenBy(x => x.HoraInicio))
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <span class="badge bg-info text-dark">@item.DiaSemanaTexto</span>
+                                        </td>
+                                        @* <td>@item.HorarioTexto</td> *@
+                                        <td>item.HorarioTexto</td>
+                                        <td>@item.Consultorio</td>
+                                        <td class="text-end pe-4">
+                                            <form asp-action="EliminarHorario" method="post" onsubmit="return confirm('¿Estás seguro de eliminar este horario?');" class="d-inline">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <input type="hidden" name="odontologoId" value="@Model.OdontologoVisual.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger border-0" title="Eliminar">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalHorario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Agregar Disponibilidad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="AgregarHorario" method="post">
+                <div class="modal-body">
+                    <input type="hidden" asp-for="NuevoHorario.OdontologoId" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Día de la Semana</label>
+                        <select asp-for="NuevoHorario.DiaSemana" class="form-select" required>
+                            <option value="1">Lunes</option>
+                            <option value="2">Martes</option>
+                            <option value="3">Miércoles</option>
+                            <option value="4">Jueves</option>
+                            <option value="5">Viernes</option>
+                            <option value="6">Sábado</option>
+                            <option value="7">Domingo</option>
+                        </select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">Hora Inicio</label>
+                            <input type="time" asp-for="NuevoHorario.HoraInicio" class="form-control" required />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label fw-bold">Hora Fin</label>
+                            <input type="time" asp-for="NuevoHorario.HoraFin" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Consultorio</label>
+                        <input asp-for="NuevoHorario.Consultorio" class="form-control" placeholder="Ej. Consultorio 1" required />
+                        <span asp-validation-for="NuevoHorario.Consultorio" class="text-danger small"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Horario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Si tienes scripts específicos
+    </script>
+}
+
+
+
+@* @model DentalNova.Core.Dtos.OdontologoDto
+
+@{
+    ViewData["Title"] = $"Perfil Dr(a). {Model.Nombre}";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var iniciales = (!string.IsNullOrEmpty(Model.Nombre) ? Model.Nombre.Substring(0, 1) : "") +
+                    (!string.IsNullOrEmpty(Model.Apellidos) ? Model.Apellidos.Substring(0, 1) : "");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-0">Perfil Profesional</h2>
+        <p class="text-muted mb-0">Detalle de credenciales y especialidades.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    <div class="col-12 col-lg-4 col-xl-3">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center p-4">
+
+                <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center mx-auto mb-3 shadow"
+                     style="width: 120px; height: 120px; font-size: 3rem; font-weight: bold;">
+                    @iniciales
+                </div>
+
+                <h4 class="fw-bold mb-1">Dr(a). @Model.Nombre</h4>
+                <h5 class="fw-light text-muted mb-3">@Model.Apellidos</h5>
+
+                <div class="badge bg-dark text-white mb-4 px-3 py-2 rounded-pill font-monospace">
+                    ID MÉDICO: #@Model.Id
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="text-start">
+                    <div class="mb-3">
+                        <label class="small text-muted fw-bold text-uppercase">Correo Electrónico</label>
+                        <div class="fs-6 text-break">
+                            <i class="fas fa-envelope text-primary me-2 opacity-50"></i>
+                            @Model.CorreoElectronico
+                        </div>
+                    </div>
+
+                    <div class="mb-0">
+                        <label class="small text-muted fw-bold text-uppercase">Fecha de Ingreso</label>
+                        <div class="fs-6">
+                            <i class="fas fa-calendar-check text-primary me-2 opacity-50"></i>
+                            @Model.FechaIngreso.ToLongDateString()
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-light text-center py-3 border-top-0 mt-4">
+                    <small class="text-success fw-bold"><i class="fas fa-circle me-1 small"></i> Personal Activo</small>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary shadow-sm fw-bold">
+                        <i class="fas fa-pen me-2"></i> Editar Perfil
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-light text-danger border">
+                        <i class="fas fa-trash me-2"></i> Dar de baja
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-8 col-xl-9">
+        <div class="card shadow-sm border-0 h-100">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h6 class="m-0 fw-bold text-primary">
+                    <i class="fas fa-briefcase-medical me-2"></i> Credenciales y Formación
+                </h6>
+            </div>
+            <div class="card-body p-4">
+
+                <div class="row align-items-center mb-5">
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex align-items-center p-3 border rounded bg-light">
+                            <div class="bg-white p-3 rounded-circle shadow-sm text-primary me-3">
+                                <i class="fas fa-id-card fa-2x"></i>
+                            </div>
+                            <div>
+                                <small class="text-muted fw-bold text-uppercase d-block">Cédula Profesional</small>
+                                <span class="fs-4 fw-bold font-monospace text-dark">@Model.CedulaProfesional</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-5">
+                    <h6 class="text-muted text-uppercase fw-bold small mb-3 border-bottom pb-2">Especialidades Clínicas</h6>
+
+                    @if (Model.Especialidades != null && Model.Especialidades.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (var esp in Model.Especialidades)
+                            {
+                                <span class="badge rounded-pill bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 px-3 py-2 fs-6 fw-normal">
+                                    <i class="fas fa-tooth me-2"></i> @esp
+                                </span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">Sin especialidades registradas (Odontología General)</span>
+                    }
+                </div>
+
+                <div class="mb-0">
+                    <h6 class="text-muted text-uppercase fw-bold small mb-3 border-bottom pb-2">Formación Académica</h6>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="small text-muted fw-bold">Institución / Universidad</label>
+                            <div class="fs-6 text-dark">
+                                <i class="fas fa-university text-secondary me-2"></i>
+                                @(string.IsNullOrEmpty(Model.Institucion) ? "No especificada" : Model.Institucion)
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="small text-muted fw-bold">Año de Graduación</label>
+                            <div class="fs-6 text-dark">
+                                <i class="fas fa-graduation-cap text-secondary me-2"></i>
+                                @(Model.AnioGraduacion.HasValue? Model.AnioGraduacion.Value.ToString() : "--")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        
+    </script>
+} *@
