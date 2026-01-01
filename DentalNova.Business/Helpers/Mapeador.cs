@@ -297,5 +297,34 @@ namespace DentalNova.Business.Helpers
             entidad.Stock = dto.Stock;
             entidad.Activo = dto.Activo;
         }
+
+        // ---- CompraArticulo Mappings ----
+
+        public static CompraArticuloDto ToDto(this CompraArticulo entidad)
+        {
+            return new CompraArticuloDto
+            {
+                Id = entidad.Id,
+                ArticuloId = entidad.Articulo?.Id ?? 0,
+                ArticuloNombre = entidad.Articulo?.Nombre ?? "N/A",
+                ArticuloCodigo = entidad.Articulo?.Codigo ?? "N/A",
+                Cantidad = entidad.Cantidad,
+                PrecioUnitario = entidad.PrecioUnitario,
+                Subtotal = entidad.Subtotal,
+                FechaCompra = entidad.FechaCompra,
+                MetodoPago = entidad.MetodoPago,
+                Proveedor = entidad.Proveedor
+            };
+        }
+
+        public static void MapFromDto(this CompraArticulo entidad, CompraArticuloDtoIn dto)
+        {
+            entidad.Cantidad = dto.Cantidad;
+            entidad.PrecioUnitario = dto.PrecioUnitario;
+            entidad.Subtotal = dto.Subtotal;
+            entidad.FechaCompra = dto.FechaCompra;
+            entidad.MetodoPago = dto.MetodoPago;
+            entidad.Proveedor = dto.Proveedor;
+        }
     }
 }
