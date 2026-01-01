@@ -269,5 +269,87 @@ namespace DentalNova.Business.Helpers
 
             return entidad;
         }
+
+        // ---- Articulo Mappings ----
+
+        public static ArticuloDto ToDto(this Articulo entidad)
+        {
+            return new ArticuloDto
+            {
+                Id = entidad.Id,
+                Categoria = entidad.Categoria,
+                Nombre = entidad.Nombre,
+                Descripcion = entidad.Descripcion,
+                Codigo = entidad.Codigo,
+                Reutilizable = entidad.Reutilizable,
+                Stock = entidad.Stock,
+                Activo = entidad.Activo
+            };
+        }
+
+        public static void MapFromDto(this Articulo entidad, ArticuloDtoIn dto)
+        {
+            entidad.Categoria = dto.Categoria;
+            entidad.Nombre = dto.Nombre;
+            entidad.Descripcion = dto.Descripcion;
+            entidad.Codigo = dto.Codigo;
+            entidad.Reutilizable = dto.Reutilizable;
+            entidad.Stock = dto.Stock;
+            entidad.Activo = dto.Activo;
+        }
+
+        // ---- CompraArticulo Mappings ----
+
+        public static CompraArticuloDto ToDto(this CompraArticulo entidad)
+        {
+            return new CompraArticuloDto
+            {
+                Id = entidad.Id,
+                ArticuloId = entidad.Articulo?.Id ?? 0,
+                ArticuloNombre = entidad.Articulo?.Nombre ?? "N/A",
+                ArticuloCodigo = entidad.Articulo?.Codigo ?? "N/A",
+                Cantidad = entidad.Cantidad,
+                PrecioUnitario = entidad.PrecioUnitario,
+                Subtotal = entidad.Subtotal,
+                FechaCompra = entidad.FechaCompra,
+                MetodoPago = entidad.MetodoPago,
+                Proveedor = entidad.Proveedor
+            };
+        }
+
+        public static void MapFromDto(this CompraArticulo entidad, CompraArticuloDtoIn dto)
+        {
+            entidad.Cantidad = dto.Cantidad;
+            entidad.PrecioUnitario = dto.PrecioUnitario;
+            entidad.Subtotal = dto.Subtotal;
+            entidad.FechaCompra = dto.FechaCompra;
+            entidad.MetodoPago = dto.MetodoPago;
+            entidad.Proveedor = dto.Proveedor;
+        }
+
+        // ---- Recordatorio Mappings ----
+
+        public static RecordatorioDto ToDto(this Recordatorio entidad)
+        {
+            return new RecordatorioDto
+            {
+                Id = entidad.Id,
+                CitaId = entidad.Cita?.Id ?? 0,
+                PacienteNombre = entidad.Cita?.Paciente?.Usuario != null 
+                    ? $"{entidad.Cita.Paciente.Usuario.Nombre} {entidad.Cita.Paciente.Usuario.Apellidos}"
+                    : "N/A",
+                FechaCita = entidad.Cita?.FechaHora ?? DateTime.MinValue,
+                FechaEnvio = entidad.FechaEnvio,
+                Mensaje = entidad.Mensaje,
+                Enviado = entidad.Enviado
+            };
+        }
+
+        public static void MapFromDto(this Recordatorio entidad, RecordatorioDtoIn dto)
+        {
+            entidad.FechaEnvio = dto.FechaEnvio;
+            entidad.Mensaje = dto.Mensaje;
+            entidad.Enviado = dto.Enviado;
+        }
     }
 }

@@ -26,6 +26,8 @@ namespace DentalNova.Business.Helpers
             services.AddScoped<ITratamientoBL, TratamientoBL>();
             services.AddScoped<IUsuarioBL, UsuarioBL>();
             services.AddScoped<IArticuloBL, ArticuloBL>();
+            services.AddScoped<ICompraArticuloBL, CompraArticuloBL>();
+            services.AddScoped<IRecordatorioBL, RecordatorioBL>();
             services.AddScoped<IPacienteBL, PacienteBL>();
             services.AddScoped<ICitaBL, CitaBL>();
             services.AddScoped<IOdontologoBL, OdontologoBL>();

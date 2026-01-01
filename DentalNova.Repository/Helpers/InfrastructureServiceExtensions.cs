@@ -23,6 +23,8 @@ namespace DentalNova.Repository.Helpers
             services.AddScoped<ITratamientoRepository, TratamientoRepository>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IArticuloRepository, ArticuloRepository>();
+            services.AddScoped<ICompraArticuloRepository, CompraArticuloRepository>();
+            services.AddScoped<IRecordatorioRepository, RecordatorioRepository>();
             services.AddScoped<IRolRepository, RolRepository>();
             services.AddScoped<IPacienteRepository, PacienteRepository>();
 

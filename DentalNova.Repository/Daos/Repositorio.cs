@@ -12,6 +12,8 @@ namespace DentalNova.Repository.Daos
         public ITratamientoRepository Tratamiento { get; }
         public IUsuarioRepository Usuario { get; }
         public IArticuloRepository Articulo { get; }
+        public ICompraArticuloRepository CompraArticulo { get; }
+        public IRecordatorioRepository Recordatorio { get; }
         public IRolRepository Rol { get; }
         public IPacienteRepository Paciente { get; }
 
@@ -25,6 +27,8 @@ namespace DentalNova.Repository.Daos
             ITratamientoRepository tratamientoRepository, 
             IUsuarioRepository usuarioRepository,
             IArticuloRepository articuloRepository,
+            ICompraArticuloRepository compraArticuloRepository,
+            IRecordatorioRepository recordatorioRepository,
             IRolRepository rolRepository,
             IPacienteRepository pacienteRepository,
 
@@ -39,6 +43,8 @@ namespace DentalNova.Repository.Daos
             Tratamiento = tratamientoRepository;
             Usuario = usuarioRepository;
             Articulo = articuloRepository;
+            CompraArticulo = compraArticuloRepository;
+            Recordatorio = recordatorioRepository;
             Rol = rolRepository;
             Paciente = pacienteRepository;
 

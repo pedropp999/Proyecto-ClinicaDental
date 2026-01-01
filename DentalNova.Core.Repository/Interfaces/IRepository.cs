@@ -11,6 +11,8 @@ namespace DentalNova.Core.Repository.Interfaces
         ITratamientoRepository Tratamiento { get; }
         IUsuarioRepository Usuario { get; }
         IArticuloRepository Articulo { get; }
+        ICompraArticuloRepository CompraArticulo { get; }
+        IRecordatorioRepository Recordatorio { get; }
         IRolRepository Rol { get; }
         IPacienteRepository Paciente { get; }
 
