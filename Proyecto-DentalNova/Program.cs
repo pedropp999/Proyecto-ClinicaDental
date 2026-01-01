@@ -12,7 +12,7 @@ builder.Services.AddBusinessLogicServices(builder.Configuration);
 builder.Services.AddControllersWithViews();
 
 
-// HttpContext (Cookies) más adelante
+// HttpContext (Cookies) mï¿½s adelante
 builder.Services.AddHttpContextAccessor();
 
 // Cliente HTTP
@@ -57,7 +57,31 @@ builder.Services.AddHttpClient<IHorarioOdontologoService, HorarioOdontologoServi
     http.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-// Configuración para IAuthService
+builder.Services.AddHttpClient<IArticuloService, ArticuloServiceApi>((sp, http) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Api:BaseUrl"] ?? "http://localhost:5260/";
+    http.BaseAddress = new Uri(baseUrl);
+    http.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddHttpClient<ICompraArticuloService, CompraArticuloServiceApi>((sp, http) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Api:BaseUrl"] ?? "http://localhost:5260/";
+    http.BaseAddress = new Uri(baseUrl);
+    http.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+builder.Services.AddHttpClient<IRecordatorioService, RecordatorioServiceApi>((sp, http) =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var baseUrl = cfg["Api:BaseUrl"] ?? "http://localhost:5260/";
+    http.BaseAddress = new Uri(baseUrl);
+    http.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+
+// Configuraciï¿½n para IAuthService
 builder.Services.AddHttpClient<IAuthService, AuthServiceApi>((sp, http) =>
 {
     var cfg = sp.GetRequiredService<IConfiguration>();
@@ -67,17 +91,17 @@ builder.Services.AddHttpClient<IAuthService, AuthServiceApi>((sp, http) =>
     http.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
-// Configuración de Autenticación por Cookies para el MVC
+// Configuraciï¿½n de Autenticaciï¿½n por Cookies para el MVC
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // Si no está logueado, ir aquí
-        options.ExpireTimeSpan = TimeSpan.FromDays(7); // Duración de la cookie
+        options.LoginPath = "/Account/Login"; // Si no estï¿½ logueado, ir aquï¿½
+        options.ExpireTimeSpan = TimeSpan.FromDays(7); // Duraciï¿½n de la cookie
         options.SlidingExpiration = true;
     });
 
 // EF Core (SQL Server)
-//Obtenemos la cadena de conexión desde appsettings.json
+//Obtenemos la cadena de conexiï¿½n desde appsettings.json
 /* var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 //gregamos el DbContext al contenedor de servicios.

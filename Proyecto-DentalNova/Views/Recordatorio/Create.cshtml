@@ -1,0 +1,66 @@
+@model Proyecto_DentalNova.Models.RecordatorioViewModel.RecordatorioVM
+
+@{
+    ViewData["Title"] = "Nuevo Recordatorio";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-0">@ViewData["Title"]</h2>
+                <p class="text-muted mb-0">Crear recordatorio para una cita.</p>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Volver
+            </a>
+        </div>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label asp-for="Recordatorio.CitaId" class="form-label">ID de Cita</label>
+                        <input asp-for="Recordatorio.CitaId" class="form-control" type="number" min="1" required />
+                        <span asp-validation-for="Recordatorio.CitaId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Recordatorio.FechaEnvio" class="form-label">Fecha y Hora de Envío (Opcional)</label>
+                        <input asp-for="Recordatorio.FechaEnvio" class="form-control" type="datetime-local" />
+                        <span asp-validation-for="Recordatorio.FechaEnvio" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Recordatorio.Mensaje" class="form-label">Mensaje</label>
+                        <textarea asp-for="Recordatorio.Mensaje" class="form-control" rows="4" placeholder="Ingrese el mensaje del recordatorio..." required></textarea>
+                        <span asp-validation-for="Recordatorio.Mensaje" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check">
+                        <input asp-for="Recordatorio.Enviado" class="form-check-input" type="checkbox" />
+                        <label asp-for="Recordatorio.Enviado" class="form-check-label">
+                            Marcar como enviado
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-light border px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
+                    <i class="fas fa-save me-2"></i> Crear Recordatorio
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
