@@ -326,5 +326,30 @@ namespace DentalNova.Business.Helpers
             entidad.MetodoPago = dto.MetodoPago;
             entidad.Proveedor = dto.Proveedor;
         }
+
+        // ---- Recordatorio Mappings ----
+
+        public static RecordatorioDto ToDto(this Recordatorio entidad)
+        {
+            return new RecordatorioDto
+            {
+                Id = entidad.Id,
+                CitaId = entidad.Cita?.Id ?? 0,
+                PacienteNombre = entidad.Cita?.Paciente?.Usuario != null 
+                    ? $"{entidad.Cita.Paciente.Usuario.Nombre} {entidad.Cita.Paciente.Usuario.Apellidos}"
+                    : "N/A",
+                FechaCita = entidad.Cita?.FechaHora ?? DateTime.MinValue,
+                FechaEnvio = entidad.FechaEnvio,
+                Mensaje = entidad.Mensaje,
+                Enviado = entidad.Enviado
+            };
+        }
+
+        public static void MapFromDto(this Recordatorio entidad, RecordatorioDtoIn dto)
+        {
+            entidad.FechaEnvio = dto.FechaEnvio;
+            entidad.Mensaje = dto.Mensaje;
+            entidad.Enviado = dto.Enviado;
+        }
     }
 }

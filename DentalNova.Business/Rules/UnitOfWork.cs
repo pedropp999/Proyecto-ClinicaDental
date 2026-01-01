@@ -14,6 +14,7 @@ namespace DentalNova.Business.Rules
         public IUsuarioBL Usuario { get; }
         public IArticuloBL Articulo { get; }
         public ICompraArticuloBL CompraArticulo { get; }
+        public IRecordatorioBL Recordatorio { get; }
         public IPacienteBL Paciente { get; }
         public ICitaBL Cita { get; }
         public IOdontologoBL Odontologo { get; }
@@ -24,6 +25,7 @@ namespace DentalNova.Business.Rules
             IUsuarioBL usuarioBL,
             IArticuloBL articuloBL,
             ICompraArticuloBL compraArticuloBL,
+            IRecordatorioBL recordatorioBL,
             IPacienteBL pacienteBL,
             ICitaBL citaBL,
             IOdontologoBL odontologoBL,
@@ -34,6 +36,7 @@ namespace DentalNova.Business.Rules
             Usuario = usuarioBL;
             Articulo = articuloBL;
             CompraArticulo = compraArticuloBL;
+            Recordatorio = recordatorioBL;
             Paciente = pacienteBL;
             Cita = citaBL;
             Odontologo = odontologoBL;

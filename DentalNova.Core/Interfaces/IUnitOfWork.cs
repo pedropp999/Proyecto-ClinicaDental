@@ -12,6 +12,7 @@ namespace DentalNova.Core.Interfaces
         ITratamientoBL Tratamiento { get; }
         IArticuloBL Articulo { get; }
         ICompraArticuloBL CompraArticulo { get; }
+        IRecordatorioBL Recordatorio { get; }
         IPacienteBL Paciente { get; }
         ICitaBL Cita { get; }
         IOdontologoBL Odontologo { get; }
