@@ -1,0 +1,89 @@
+@model Proyecto_DentalNova.Models.CompraArticuloViewModel.CompraArticuloVM
+
+@{
+    ViewData["Title"] = "Nueva Compra de Artículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-0">@ViewData["Title"]</h2>
+                <p class="text-muted mb-0">Registrar nueva compra de artículo.</p>
+            </div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Volver
+            </a>
+        </div>
+
+        <form asp-action="Create" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label asp-for="CompraArticulo.ArticuloId" class="form-label">Artículo</label>
+                        <select asp-for="CompraArticulo.ArticuloId" class="form-select" required>
+                            <option value="">-- Seleccione un artículo --</option>
+                            @foreach (var articulo in Model.ArticulosDisponibles)
+                            {
+                                <option value="@articulo.Id">@articulo.Nombre (@articulo.Codigo)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CompraArticulo.ArticuloId" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CompraArticulo.Cantidad" class="form-label">Cantidad</label>
+                            <input asp-for="CompraArticulo.Cantidad" class="form-control" type="number" min="1" required />
+                            <span asp-validation-for="CompraArticulo.Cantidad" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CompraArticulo.PrecioUnitario" class="form-label">Precio Unitario</label>
+                            <input asp-for="CompraArticulo.PrecioUnitario" class="form-control" type="number" step="0.01" min="0.01" required />
+                            <span asp-validation-for="CompraArticulo.PrecioUnitario" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CompraArticulo.FechaCompra" class="form-label">Fecha de Compra</label>
+                            <input asp-for="CompraArticulo.FechaCompra" class="form-control" type="date" required />
+                            <span asp-validation-for="CompraArticulo.FechaCompra" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CompraArticulo.MetodoPago" class="form-label">Método de Pago</label>
+                            <select asp-for="CompraArticulo.MetodoPago" class="form-select" required>
+                                <option value="0">Efectivo</option>
+                                <option value="1">Tarjeta de Débito</option>
+                                <option value="2">Tarjeta de Crédito</option>
+                            </select>
+                            <span asp-validation-for="CompraArticulo.MetodoPago" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CompraArticulo.Proveedor" class="form-label">Proveedor</label>
+                        <input asp-for="CompraArticulo.Proveedor" class="form-control" required />
+                        <span asp-validation-for="CompraArticulo.Proveedor" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-4">
+                <a asp-action="Index" class="btn btn-light border px-4">Cancelar</a>
+                <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">
+                    <i class="fas fa-save me-2"></i> Registrar Compra
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

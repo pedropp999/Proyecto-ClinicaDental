@@ -1,0 +1,54 @@
+@model DentalNova.Core.Dtos.CompraArticuloDto
+
+@{
+    ViewData["Title"] = "Eliminar Compra";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Confirmar Eliminación</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-danger fw-bold">¿Está seguro de que desea eliminar esta compra?</p>
+                
+                <dl class="row">
+                    <dt class="col-sm-4">Artículo:</dt>
+                    <dd class="col-sm-8">@Model.ArticuloNombre</dd>
+
+                    <dt class="col-sm-4">Código:</dt>
+                    <dd class="col-sm-8">@Model.ArticuloCodigo</dd>
+
+                    <dt class="col-sm-4">Fecha:</dt>
+                    <dd class="col-sm-8">@Model.FechaCompra.ToString("dd/MM/yyyy")</dd>
+
+                    <dt class="col-sm-4">Cantidad:</dt>
+                    <dd class="col-sm-8">@Model.Cantidad</dd>
+
+                    <dt class="col-sm-4">Subtotal:</dt>
+                    <dd class="col-sm-8 fw-bold">@Model.Subtotal.ToString("C")</dd>
+                </dl>
+
+                <div class="alert alert-warning" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Advertencia:</strong> Esta acción no se puede deshacer.
+                </div>
+            </div>
+            <div class="card-footer bg-white">
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-times me-2"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash me-2"></i> Eliminar Compra
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
