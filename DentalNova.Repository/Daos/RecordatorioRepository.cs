@@ -75,7 +75,7 @@ namespace DentalNova.Repository.Daos
             if (recordatorio != null)
             {
                 recordatorio.Enviado = true;
-                recordatorio.FechaEnvio = DateTime.Now;
+                recordatorio.FechaEnvio = DateTime.UtcNow;
                 await _context.SaveChangesAsync();
             }
         }

@@ -61,6 +61,8 @@ namespace DentalNova.Business.Rules
             // Actualizar el stock del artículo
             articulo.Stock += dto.Cantidad;
             
+            // Nota: Las operaciones se realizan en el mismo contexto de base de datos,
+            // por lo que SaveChangesAsync es transaccional
             await _repository.CompraArticulo.AgregarAsync(nueva);
             await _repository.Articulo.ActualizarAsync(articulo);
         }
@@ -74,16 +76,28 @@ namespace DentalNova.Business.Rules
             if (articulo == null)
                 throw new InvalidOperationException("El artículo especificado no existe.");
 
-            // Revertir el stock anterior
-            var articuloAnterior = await _repository.Articulo.ObtenerPorIdAsync(existente.Articulo.Id);
-            if (articuloAnterior != null)
+            // Si cambió el artículo, revertir stock del anterior y aplicar al nuevo
+            if (existente.Articulo.Id != dto.ArticuloId)
             {
-                articuloAnterior.Stock -= existente.Cantidad;
-                await _repository.Articulo.ActualizarAsync(articuloAnterior);
-            }
+                var articuloAnterior = await _repository.Articulo.ObtenerPorIdAsync(existente.Articulo.Id);
+                if (articuloAnterior != null)
+                {
+                    articuloAnterior.Stock -= existente.Cantidad;
+                    if (articuloAnterior.Stock < 0)
+                        throw new InvalidOperationException("La operación resultaría en stock negativo para el artículo anterior.");
+                    await _repository.Articulo.ActualizarAsync(articuloAnterior);
+                }
 
-            // Aplicar el nuevo stock
-            articulo.Stock += dto.Cantidad;
+                articulo.Stock += dto.Cantidad;
+            }
+            else
+            {
+                // Mismo artículo, solo ajustar la diferencia de cantidad
+                int diferencia = dto.Cantidad - existente.Cantidad;
+                articulo.Stock += diferencia;
+                if (articulo.Stock < 0)
+                    throw new InvalidOperationException("La operación resultaría en stock negativo.");
+            }
 
             existente.MapFromDto(dto);
             existente.Articulo = articulo;
@@ -102,6 +116,8 @@ namespace DentalNova.Business.Rules
                 if (articulo != null)
                 {
                     articulo.Stock -= compra.Cantidad;
+                    if (articulo.Stock < 0)
+                        throw new InvalidOperationException("La operación resultaría en stock negativo.");
                     await _repository.Articulo.ActualizarAsync(articulo);
                 }
 
